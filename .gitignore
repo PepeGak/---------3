@@ -1,2 +1,4 @@
 .vscode/
-*.out*
+kurs_debug.out
+kurs_release.out
+parser.output
