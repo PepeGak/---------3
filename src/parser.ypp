@@ -1,0 +1,223 @@
+%require "3.3"
+%define parse.error detailed
+%output "parser.tab.cpp"
+
+%{
+#include <iostream>
+#include <vector>
+#include <string>
+#include <string.h>
+#include <cstring>
+
+void yyerror(const char*);
+int yylex(void);
+extern char* yytext;
+
+std::vector<std::string> lines;
+%}
+
+%union {
+    char* sVal;
+}
+
+//$$ <=> yyval.sVal
+//$i <=> yyvsp[-i].sVal
+
+/* PLUS MINUS DIVIDE MULTIPLY*/
+%token<sVal> PROGRAM END_PROGRAM 
+    NEW_LINE OPERATOR
+    VAR END_VAR 
+    FOR TO DO END_FOR 
+    IF THEN ELSIF END_IF 
+    WHILE END_WHILE 
+    INT AS 
+    ASSIGNMENT 
+    EQUAL NOT_EQUAL 
+    IDENTIFIER NUMBER 
+
+%type<sVal> program 
+    var_declarations declarations declaration 
+    statements statement logic_statement assign_statements assign_statement
+    expr operand 
+    for_loop while_loop if_statement
+
+%start program
+
+%%
+program:
+    PROGRAM IDENTIFIER var_declarations statements END_PROGRAM
+    {
+        std::cout.flush();
+        std::cout << "#include <iostream>\nnamespace " << $2 << "=std;\nint main(int argc, char* args[]) {\n";
+        for (auto line : lines)
+            std::cout << line;
+        std::cout << "return 0;\n}" << std::endl;
+    }
+    ;
+
+var_declarations:
+    VAR declarations END_VAR
+    ;
+
+declarations:
+    declaration
+    | declarations declaration
+    ;
+
+declaration:
+    IDENTIFIER AS INT ASSIGNMENT NUMBER NEW_LINE
+    {
+        std::string line= "int ";
+        line += $1;
+        line += "=";
+        line += $5;
+        line += ";\n";
+        $$ = strdup(line.c_str());
+        
+        lines.push_back(line);
+    }
+    | IDENTIFIER AS INT NEW_LINE
+    {
+        std::string line= "int ";
+        line += $1;
+        line += ";\n";
+        $$ = strdup(line.c_str());
+        
+        lines.push_back(line);
+    }
+    ;
+
+statements:
+    statement
+    | statements statement
+    ;
+
+statement:
+    assign_statements
+    | for_loop
+    | while_loop
+    | if_statement
+    ;
+
+assign_statements:
+    assign_statement
+    | assign_statements assign_statement
+    {
+        std::string line = $1;
+        line += $2;
+        $$ = strdup(line.c_str());
+    }
+    ;
+
+assign_statement:
+    IDENTIFIER ASSIGNMENT expr NEW_LINE
+    {
+        std::string line = $1;
+        line += "=";
+        line += $3;
+        line += ";\n";
+        $$ = strdup(line.c_str());
+    }
+    ;
+
+expr:
+    operand OPERATOR operand
+    {
+        std::string line = $1;
+        line += $2;
+        line += $3;
+        $$ = strdup(line.c_str());
+    }
+    ;
+
+operand:
+    IDENTIFIER
+    {
+        std::string line = $1;
+        $$ = strdup(line.c_str());
+    }
+    | NUMBER
+    {
+        std::string line = $1;
+        $$ = strdup(line.c_str());
+    }
+    ;
+
+
+logic_statement:
+    operand EQUAL operand
+    {
+        std::string line = $1;
+        line += "==";
+        line += $3;
+        $$ = strdup(line.c_str());
+    }
+    | operand NOT_EQUAL operand
+    {
+        std::string line = $1;
+        line += "!=";
+        line += $3;
+        $$ = strdup(line.c_str());
+    }
+    ;
+
+for_loop:
+    FOR IDENTIFIER TO NUMBER DO statements END_FOR
+    {
+        std::string line = "for (int ";
+        line += $2;
+        line += "=1;";
+        line += $2;
+        line += "<=";
+        line += $4;
+        line += ";";
+        line += $2;
+        line += "++) {\n";
+        line += $6;
+        line += "}\n";
+        $$ = strdup(line.c_str());
+        
+        lines.push_back(line);
+    }
+    ;
+
+while_loop:
+    WHILE logic_statement DO statements END_WHILE
+    {
+        std::string line = "while (";
+        line += $2;
+        line += ") {\n";
+        line += $4;
+        line += "}\n";
+        $$ = strdup(line.c_str());
+        
+        lines.push_back(line);
+    }
+    ;
+
+if_statement:
+    IF logic_statement THEN statements END_IF
+    {
+        std::string line = "if (";
+        line += $2;
+        line += ") {\n";
+        line += $4;
+        line += "}\n";
+        $$ = strdup(line.c_str());
+    }
+    | IF logic_statement THEN assign_statements ELSIF logic_statement THEN assign_statements END_IF
+    {
+        std::string line = "if (";
+        line += $2;
+        line += ") {\n";
+        line += $4;
+        line += "} else if (";
+        line += $6;
+        line += ") {\n";
+        line += $8;
+        line += "}\n";
+        $$ = strdup(line.c_str());
+    }
+    ;
+
+%%

@@ -1,0 +1,735 @@
+Состояние 16 конфликты: 1 сдвига/вывода
+Состояние 48 конфликты: 1 сдвига/вывода
+
+
+Грамматика
+
+    0 $accept: program $end
+
+    1 program: PROGRAM IDENTIFIER var_declarations statements END_PROGRAM
+
+    2 var_declarations: VAR declarations END_VAR
+
+    3 declarations: declaration
+    4             | declarations declaration
+
+    5 declaration: IDENTIFIER AS INT ASSIGNMENT NUMBER NEW_LINE
+    6            | IDENTIFIER AS INT NEW_LINE
+
+    7 statements: statement
+    8           | statements statement
+
+    9 statement: assign_statements
+   10          | for_loop
+   11          | while_loop
+   12          | if_statement
+
+   13 assign_statements: assign_statement
+   14                  | assign_statements assign_statement
+
+   15 assign_statement: IDENTIFIER ASSIGNMENT expr NEW_LINE
+
+   16 expr: operand OPERATOR operand
+
+   17 operand: IDENTIFIER
+   18        | NUMBER
+
+   19 logic_statement: operand EQUAL operand
+   20                | operand NOT_EQUAL operand
+
+   21 for_loop: FOR IDENTIFIER TO NUMBER DO statements END_FOR
+
+   22 while_loop: WHILE logic_statement DO statements END_WHILE
+
+   23 if_statement: IF logic_statement THEN statements END_IF
+   24             | IF logic_statement THEN assign_statements ELSIF logic_statement THEN assign_statements END_IF
+
+
+Терминальные символы с правилами, в которых они появляются
+
+    $end (0) 0
+    error (256)
+    PROGRAM <sVal> (258) 1
+    END_PROGRAM <sVal> (259) 1
+    NEW_LINE <sVal> (260) 5 6 15
+    OPERATOR <sVal> (261) 16
+    VAR <sVal> (262) 2
+    END_VAR <sVal> (263) 2
+    FOR <sVal> (264) 21
+    TO <sVal> (265) 21
+    DO <sVal> (266) 21 22
+    END_FOR <sVal> (267) 21
+    IF <sVal> (268) 23 24
+    THEN <sVal> (269) 23 24
+    ELSIF <sVal> (270) 24
+    END_IF <sVal> (271) 23 24
+    WHILE <sVal> (272) 22
+    END_WHILE <sVal> (273) 22
+    INT <sVal> (274) 5 6
+    AS <sVal> (275) 5 6
+    ASSIGNMENT <sVal> (276) 5 15
+    EQUAL <sVal> (277) 19
+    NOT_EQUAL <sVal> (278) 20
+    IDENTIFIER <sVal> (279) 1 5 6 15 17 21
+    NUMBER <sVal> (280) 5 18 21
+
+
+Нетерминальные символы с правилами, в которых они появляются
+
+    $accept (26)
+        on left: 0
+    program <sVal> (27)
+        on left: 1
+        on right: 0
+    var_declarations <sVal> (28)
+        on left: 2
+        on right: 1
+    declarations <sVal> (29)
+        on left: 3 4
+        on right: 2 4
+    declaration <sVal> (30)
+        on left: 5 6
+        on right: 3 4
+    statements <sVal> (31)
+        on left: 7 8
+        on right: 1 8 21 22 23
+    statement <sVal> (32)
+        on left: 9 10 11 12
+        on right: 7 8
+    assign_statements <sVal> (33)
+        on left: 13 14
+        on right: 9 14 24
+    assign_statement <sVal> (34)
+        on left: 15
+        on right: 13 14
+    expr <sVal> (35)
+        on left: 16
+        on right: 15
+    operand <sVal> (36)
+        on left: 17 18
+        on right: 16 19 20
+    logic_statement <sVal> (37)
+        on left: 19 20
+        on right: 22 23 24
+    for_loop <sVal> (38)
+        on left: 21
+        on right: 10
+    while_loop <sVal> (39)
+        on left: 22
+        on right: 11
+    if_statement <sVal> (40)
+        on left: 23 24
+        on right: 12
+
+
+Состояние 0
+
+    0 $accept: • program $end
+
+    PROGRAM  сдвиг, и переход в состояние 1
+
+    program  переход в состояние 2
+
+
+Состояние 1
+
+    1 program: PROGRAM • IDENTIFIER var_declarations statements END_PROGRAM
+
+    IDENTIFIER  сдвиг, и переход в состояние 3
+
+
+Состояние 2
+
+    0 $accept: program • $end
+
+    $end  сдвиг, и переход в состояние 4
+
+
+Состояние 3
+
+    1 program: PROGRAM IDENTIFIER • var_declarations statements END_PROGRAM
+
+    VAR  сдвиг, и переход в состояние 5
+
+    var_declarations  переход в состояние 6
+
+
+Состояние 4
+
+    0 $accept: program $end •
+
+    $default  принять
+
+
+Состояние 5
+
+    2 var_declarations: VAR • declarations END_VAR
+
+    IDENTIFIER  сдвиг, и переход в состояние 7
+
+    declarations  переход в состояние 8
+    declaration   переход в состояние 9
+
+
+Состояние 6
+
+    1 program: PROGRAM IDENTIFIER var_declarations • statements END_PROGRAM
+
+    FOR         сдвиг, и переход в состояние 10
+    IF          сдвиг, и переход в состояние 11
+    WHILE       сдвиг, и переход в состояние 12
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    statements         переход в состояние 14
+    statement          переход в состояние 15
+    assign_statements  переход в состояние 16
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 7
+
+    5 declaration: IDENTIFIER • AS INT ASSIGNMENT NUMBER NEW_LINE
+    6            | IDENTIFIER • AS INT NEW_LINE
+
+    AS  сдвиг, и переход в состояние 21
+
+
+Состояние 8
+
+    2 var_declarations: VAR declarations • END_VAR
+    4 declarations: declarations • declaration
+
+    END_VAR     сдвиг, и переход в состояние 22
+    IDENTIFIER  сдвиг, и переход в состояние 7
+
+    declaration  переход в состояние 23
+
+
+Состояние 9
+
+    3 declarations: declaration •
+
+    $default  вывод с использованием правила 3 (declarations)
+
+
+Состояние 10
+
+   21 for_loop: FOR • IDENTIFIER TO NUMBER DO statements END_FOR
+
+    IDENTIFIER  сдвиг, и переход в состояние 24
+
+
+Состояние 11
+
+   23 if_statement: IF • logic_statement THEN statements END_IF
+   24             | IF • logic_statement THEN assign_statements ELSIF logic_statement THEN assign_statements END_IF
+
+    IDENTIFIER  сдвиг, и переход в состояние 25
+    NUMBER      сдвиг, и переход в состояние 26
+
+    operand          переход в состояние 27
+    logic_statement  переход в состояние 28
+
+
+Состояние 12
+
+   22 while_loop: WHILE • logic_statement DO statements END_WHILE
+
+    IDENTIFIER  сдвиг, и переход в состояние 25
+    NUMBER      сдвиг, и переход в состояние 26
+
+    operand          переход в состояние 27
+    logic_statement  переход в состояние 29
+
+
+Состояние 13
+
+   15 assign_statement: IDENTIFIER • ASSIGNMENT expr NEW_LINE
+
+    ASSIGNMENT  сдвиг, и переход в состояние 30
+
+
+Состояние 14
+
+    1 program: PROGRAM IDENTIFIER var_declarations statements • END_PROGRAM
+    8 statements: statements • statement
+
+    END_PROGRAM  сдвиг, и переход в состояние 31
+    FOR          сдвиг, и переход в состояние 10
+    IF           сдвиг, и переход в состояние 11
+    WHILE        сдвиг, и переход в состояние 12
+    IDENTIFIER   сдвиг, и переход в состояние 13
+
+    statement          переход в состояние 32
+    assign_statements  переход в состояние 16
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 15
+
+    7 statements: statement •
+
+    $default  вывод с использованием правила 7 (statements)
+
+
+Состояние 16
+
+    9 statement: assign_statements •
+   14 assign_statements: assign_statements • assign_statement
+
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    IDENTIFIER  [вывод с использованием правила 9 (statement)]
+    $default    вывод с использованием правила 9 (statement)
+
+    assign_statement  переход в состояние 33
+
+
+Состояние 17
+
+   13 assign_statements: assign_statement •
+
+    $default  вывод с использованием правила 13 (assign_statements)
+
+
+Состояние 18
+
+   10 statement: for_loop •
+
+    $default  вывод с использованием правила 10 (statement)
+
+
+Состояние 19
+
+   11 statement: while_loop •
+
+    $default  вывод с использованием правила 11 (statement)
+
+
+Состояние 20
+
+   12 statement: if_statement •
+
+    $default  вывод с использованием правила 12 (statement)
+
+
+Состояние 21
+
+    5 declaration: IDENTIFIER AS • INT ASSIGNMENT NUMBER NEW_LINE
+    6            | IDENTIFIER AS • INT NEW_LINE
+
+    INT  сдвиг, и переход в состояние 34
+
+
+Состояние 22
+
+    2 var_declarations: VAR declarations END_VAR •
+
+    $default  вывод с использованием правила 2 (var_declarations)
+
+
+Состояние 23
+
+    4 declarations: declarations declaration •
+
+    $default  вывод с использованием правила 4 (declarations)
+
+
+Состояние 24
+
+   21 for_loop: FOR IDENTIFIER • TO NUMBER DO statements END_FOR
+
+    TO  сдвиг, и переход в состояние 35
+
+
+Состояние 25
+
+   17 operand: IDENTIFIER •
+
+    $default  вывод с использованием правила 17 (operand)
+
+
+Состояние 26
+
+   18 operand: NUMBER •
+
+    $default  вывод с использованием правила 18 (operand)
+
+
+Состояние 27
+
+   19 logic_statement: operand • EQUAL operand
+   20                | operand • NOT_EQUAL operand
+
+    EQUAL      сдвиг, и переход в состояние 36
+    NOT_EQUAL  сдвиг, и переход в состояние 37
+
+
+Состояние 28
+
+   23 if_statement: IF logic_statement • THEN statements END_IF
+   24             | IF logic_statement • THEN assign_statements ELSIF logic_statement THEN assign_statements END_IF
+
+    THEN  сдвиг, и переход в состояние 38
+
+
+Состояние 29
+
+   22 while_loop: WHILE logic_statement • DO statements END_WHILE
+
+    DO  сдвиг, и переход в состояние 39
+
+
+Состояние 30
+
+   15 assign_statement: IDENTIFIER ASSIGNMENT • expr NEW_LINE
+
+    IDENTIFIER  сдвиг, и переход в состояние 25
+    NUMBER      сдвиг, и переход в состояние 26
+
+    expr     переход в состояние 40
+    operand  переход в состояние 41
+
+
+Состояние 31
+
+    1 program: PROGRAM IDENTIFIER var_declarations statements END_PROGRAM •
+
+    $default  вывод с использованием правила 1 (program)
+
+
+Состояние 32
+
+    8 statements: statements statement •
+
+    $default  вывод с использованием правила 8 (statements)
+
+
+Состояние 33
+
+   14 assign_statements: assign_statements assign_statement •
+
+    $default  вывод с использованием правила 14 (assign_statements)
+
+
+Состояние 34
+
+    5 declaration: IDENTIFIER AS INT • ASSIGNMENT NUMBER NEW_LINE
+    6            | IDENTIFIER AS INT • NEW_LINE
+
+    NEW_LINE    сдвиг, и переход в состояние 42
+    ASSIGNMENT  сдвиг, и переход в состояние 43
+
+
+Состояние 35
+
+   21 for_loop: FOR IDENTIFIER TO • NUMBER DO statements END_FOR
+
+    NUMBER  сдвиг, и переход в состояние 44
+
+
+Состояние 36
+
+   19 logic_statement: operand EQUAL • operand
+
+    IDENTIFIER  сдвиг, и переход в состояние 25
+    NUMBER      сдвиг, и переход в состояние 26
+
+    operand  переход в состояние 45
+
+
+Состояние 37
+
+   20 logic_statement: operand NOT_EQUAL • operand
+
+    IDENTIFIER  сдвиг, и переход в состояние 25
+    NUMBER      сдвиг, и переход в состояние 26
+
+    operand  переход в состояние 46
+
+
+Состояние 38
+
+   23 if_statement: IF logic_statement THEN • statements END_IF
+   24             | IF logic_statement THEN • assign_statements ELSIF logic_statement THEN assign_statements END_IF
+
+    FOR         сдвиг, и переход в состояние 10
+    IF          сдвиг, и переход в состояние 11
+    WHILE       сдвиг, и переход в состояние 12
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    statements         переход в состояние 47
+    statement          переход в состояние 15
+    assign_statements  переход в состояние 48
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 39
+
+   22 while_loop: WHILE logic_statement DO • statements END_WHILE
+
+    FOR         сдвиг, и переход в состояние 10
+    IF          сдвиг, и переход в состояние 11
+    WHILE       сдвиг, и переход в состояние 12
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    statements         переход в состояние 49
+    statement          переход в состояние 15
+    assign_statements  переход в состояние 16
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 40
+
+   15 assign_statement: IDENTIFIER ASSIGNMENT expr • NEW_LINE
+
+    NEW_LINE  сдвиг, и переход в состояние 50
+
+
+Состояние 41
+
+   16 expr: operand • OPERATOR operand
+
+    OPERATOR  сдвиг, и переход в состояние 51
+
+
+Состояние 42
+
+    6 declaration: IDENTIFIER AS INT NEW_LINE •
+
+    $default  вывод с использованием правила 6 (declaration)
+
+
+Состояние 43
+
+    5 declaration: IDENTIFIER AS INT ASSIGNMENT • NUMBER NEW_LINE
+
+    NUMBER  сдвиг, и переход в состояние 52
+
+
+Состояние 44
+
+   21 for_loop: FOR IDENTIFIER TO NUMBER • DO statements END_FOR
+
+    DO  сдвиг, и переход в состояние 53
+
+
+Состояние 45
+
+   19 logic_statement: operand EQUAL operand •
+
+    $default  вывод с использованием правила 19 (logic_statement)
+
+
+Состояние 46
+
+   20 logic_statement: operand NOT_EQUAL operand •
+
+    $default  вывод с использованием правила 20 (logic_statement)
+
+
+Состояние 47
+
+    8 statements: statements • statement
+   23 if_statement: IF logic_statement THEN statements • END_IF
+
+    FOR         сдвиг, и переход в состояние 10
+    IF          сдвиг, и переход в состояние 11
+    END_IF      сдвиг, и переход в состояние 54
+    WHILE       сдвиг, и переход в состояние 12
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    statement          переход в состояние 32
+    assign_statements  переход в состояние 16
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 48
+
+    9 statement: assign_statements •
+   14 assign_statements: assign_statements • assign_statement
+   24 if_statement: IF logic_statement THEN assign_statements • ELSIF logic_statement THEN assign_statements END_IF
+
+    ELSIF       сдвиг, и переход в состояние 55
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    IDENTIFIER  [вывод с использованием правила 9 (statement)]
+    $default    вывод с использованием правила 9 (statement)
+
+    assign_statement  переход в состояние 33
+
+
+Состояние 49
+
+    8 statements: statements • statement
+   22 while_loop: WHILE logic_statement DO statements • END_WHILE
+
+    FOR         сдвиг, и переход в состояние 10
+    IF          сдвиг, и переход в состояние 11
+    WHILE       сдвиг, и переход в состояние 12
+    END_WHILE   сдвиг, и переход в состояние 56
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    statement          переход в состояние 32
+    assign_statements  переход в состояние 16
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 50
+
+   15 assign_statement: IDENTIFIER ASSIGNMENT expr NEW_LINE •
+
+    $default  вывод с использованием правила 15 (assign_statement)
+
+
+Состояние 51
+
+   16 expr: operand OPERATOR • operand
+
+    IDENTIFIER  сдвиг, и переход в состояние 25
+    NUMBER      сдвиг, и переход в состояние 26
+
+    operand  переход в состояние 57
+
+
+Состояние 52
+
+    5 declaration: IDENTIFIER AS INT ASSIGNMENT NUMBER • NEW_LINE
+
+    NEW_LINE  сдвиг, и переход в состояние 58
+
+
+Состояние 53
+
+   21 for_loop: FOR IDENTIFIER TO NUMBER DO • statements END_FOR
+
+    FOR         сдвиг, и переход в состояние 10
+    IF          сдвиг, и переход в состояние 11
+    WHILE       сдвиг, и переход в состояние 12
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    statements         переход в состояние 59
+    statement          переход в состояние 15
+    assign_statements  переход в состояние 16
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 54
+
+   23 if_statement: IF logic_statement THEN statements END_IF •
+
+    $default  вывод с использованием правила 23 (if_statement)
+
+
+Состояние 55
+
+   24 if_statement: IF logic_statement THEN assign_statements ELSIF • logic_statement THEN assign_statements END_IF
+
+    IDENTIFIER  сдвиг, и переход в состояние 25
+    NUMBER      сдвиг, и переход в состояние 26
+
+    operand          переход в состояние 27
+    logic_statement  переход в состояние 60
+
+
+Состояние 56
+
+   22 while_loop: WHILE logic_statement DO statements END_WHILE •
+
+    $default  вывод с использованием правила 22 (while_loop)
+
+
+Состояние 57
+
+   16 expr: operand OPERATOR operand •
+
+    $default  вывод с использованием правила 16 (expr)
+
+
+Состояние 58
+
+    5 declaration: IDENTIFIER AS INT ASSIGNMENT NUMBER NEW_LINE •
+
+    $default  вывод с использованием правила 5 (declaration)
+
+
+Состояние 59
+
+    8 statements: statements • statement
+   21 for_loop: FOR IDENTIFIER TO NUMBER DO statements • END_FOR
+
+    FOR         сдвиг, и переход в состояние 10
+    END_FOR     сдвиг, и переход в состояние 61
+    IF          сдвиг, и переход в состояние 11
+    WHILE       сдвиг, и переход в состояние 12
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    statement          переход в состояние 32
+    assign_statements  переход в состояние 16
+    assign_statement   переход в состояние 17
+    for_loop           переход в состояние 18
+    while_loop         переход в состояние 19
+    if_statement       переход в состояние 20
+
+
+Состояние 60
+
+   24 if_statement: IF logic_statement THEN assign_statements ELSIF logic_statement • THEN assign_statements END_IF
+
+    THEN  сдвиг, и переход в состояние 62
+
+
+Состояние 61
+
+   21 for_loop: FOR IDENTIFIER TO NUMBER DO statements END_FOR •
+
+    $default  вывод с использованием правила 21 (for_loop)
+
+
+Состояние 62
+
+   24 if_statement: IF logic_statement THEN assign_statements ELSIF logic_statement THEN • assign_statements END_IF
+
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    assign_statements  переход в состояние 63
+    assign_statement   переход в состояние 17
+
+
+Состояние 63
+
+   14 assign_statements: assign_statements • assign_statement
+   24 if_statement: IF logic_statement THEN assign_statements ELSIF logic_statement THEN assign_statements • END_IF
+
+    END_IF      сдвиг, и переход в состояние 64
+    IDENTIFIER  сдвиг, и переход в состояние 13
+
+    assign_statement  переход в состояние 33
+
+
+Состояние 64
+
+   24 if_statement: IF logic_statement THEN assign_statements ELSIF logic_statement THEN assign_statements END_IF •
+
+    $default  вывод с использованием правила 24 (if_statement)
